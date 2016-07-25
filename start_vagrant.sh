@@ -59,7 +59,9 @@ prepare_sd_for_vagrant()
   fi
 }
 
-vagrant up
+if [ $(ls | grep "sd.vmdk") &> /dev/null ]; then 
+  vagrant up 
+fi
 
 if [ ! $? -eq 0 ]; then
   rm sd.vmdk
