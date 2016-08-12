@@ -32,5 +32,8 @@ Vagrant.configure(2) do |config|
     # Install plugins
     config.vm.provision :shell, privileged: false,
       inline: "vim +PluginInstall &> /dev/null"
+
+    # Install tmux
+    config.vm.provision :shell, inline: "apt-get -y install tmux"
   end
 end
