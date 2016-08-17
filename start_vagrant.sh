@@ -2,7 +2,8 @@
 
 PARTITION=$1
 DISK=$(echo $1 | cut -f1 -ds)s$(echo $1 | cut -f2 -ds)
-USER=$(echo `who` | cut -f1 "-d ")
+##USER=$(echo `who` | cut -f1 "-d ")
+USER=JamesAnthonyLow
 COLOR="\033[1;33m"
 OFF="\x1b[0m"
 
@@ -61,6 +62,8 @@ prepare_sd_for_vagrant()
 
 if [ $(ls | grep "sd.vmdk") &> /dev/null ]; then 
   vagrant up 
+else
+ prepare_sd_for_vagrant;
 fi
 
 if [ ! $? -eq 0 ]; then
