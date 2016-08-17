@@ -1,0 +1,3 @@
+[submodule "james-vim-rc"]
+	path = james-vim-rc
+	url = git@github.com:JamesAnthonyLow/james-vim-rc.git
