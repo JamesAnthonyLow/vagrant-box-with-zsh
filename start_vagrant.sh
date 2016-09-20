@@ -2,8 +2,7 @@
 
 PARTITION=$1
 DISK=$(echo $1 | cut -f1 -ds)s$(echo $1 | cut -f2 -ds)
-##USER=$(echo `who` | cut -f1 "-d ")
-USER=JamesAnthonyLow
+USER=$2
 COLOR="\033[1;33m"
 OFF="\x1b[0m"
 
@@ -51,8 +50,8 @@ prepare_sd_for_vagrant()
       printf "."   
     done
     printf "\n"
-    printf "${COLOR}Rawfile sd.vmdk created please add as storage in VirtualBox Manager$OFF\n"
-    virtualBox &> /dev/null
+        printf "${COLOR}Rawfile sd.vmdk created please add as storage in VirtualBox Manager$OFF\n"
+        virtualBox &> /dev/null
     unmount_disk
   else
     printf "${COLOR}Rawfile sd.vmdk already exists$OFF\n"
@@ -60,15 +59,20 @@ prepare_sd_for_vagrant()
   fi
 }
 
+vagrant halt
+
 if [ $(ls | grep "sd.vmdk") &> /dev/null ]; then 
+  unmount_disk
   vagrant up 
 else
- prepare_sd_for_vagrant;
+  prepare_sd_for_vagrant;
 fi
 
 if [ ! $? -eq 0 ]; then
   rm sd.vmdk
   prepare_sd_for_vagrant;
 fi
+
+unmount_disk
 
 vagrant up

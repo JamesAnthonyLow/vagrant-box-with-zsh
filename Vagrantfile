@@ -1,8 +1,11 @@
 Vagrant.configure(2) do |config|
   config.vm.define "workstation" do |w|
     w.vm.box = "ubuntu/trusty64"
-    w.vm.network "private_network", ip:"192.168.0.252"
-    w.vm.hostname = "workstation.example.com"
+    w.vm.network "forwarded_port", guest: 8080, host: 8080
+    w.vm.network "forwarded_port", guest: 3000, host: 3000
+    w.vm.network "forwarded_port", guest: 3001, host: 3001
+    w.vm.network "private_network", type: "dhcp"
+
     #Install git and zsh prerequisites 
     config.vm.provision :shell, inline: "apt-get -y install git"
     config.vm.provision :shell, inline: "apt-get -y install zsh"
@@ -23,11 +26,14 @@ Vagrant.configure(2) do |config|
 
     # Clone vundle from the git repo 
     config.vm.provision :shell, privileged: false,
-      inline: "git clone git://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/vundle.vim"
-    
+      inline: "git clone git://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim"
+
     # Copy in the default .vimrc config file
     config.vm.provision :shell, privileged: false,
-      inline: "cp /vagrant/james-vim-rc/.vimrc ~/.vimrc"
+      inline: "cp /vagrant/vimrc ~/.vimrc"
+
+    # Install Openssl
+    config.vm.provision :shell, inline: "apt-get -y install libssl-dev"
 
     # Install plugins
     config.vm.provision :shell, privileged: false,
